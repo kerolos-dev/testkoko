@@ -1,16 +1,10 @@
-import uvicorn
-from fastapi import FastAPI
-from app.database import engine, Base
-from app import models
+from fastapi import FastAPI, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import get_session
 
 app = FastAPI()
 
-# إنشاء الجداول عند تشغيل السيرفر
-@app.on_event("startup")
-async def startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-
 @app.get("/")
-async def root():
-    return {"message": "FastAPI connected to PostgreSQL!"}
+async def read_root(session: AsyncSession = Depends(get_session)):
+    result = await session.execute("SELECT 1")
+    return {"message": "Connected to DB!"}

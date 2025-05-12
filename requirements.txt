@@ -1,6 +1,6 @@
 fastapi
-uvicorn
-sqlalchemy
+uvicorn[standard]
+SQLAlchemy
 asyncpg
-databases
+redis
 python-dotenv
